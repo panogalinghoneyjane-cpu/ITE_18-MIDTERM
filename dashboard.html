@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washy Washy - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-back {
+            background: #dc3545;
+        }
+
+        .btn-back:hover {
+            background: #c82333;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .info-card h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .info-card p {
+            font-size: 16px;
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        .info-card strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            margin-left: 30px;
+            display: block;
+        }
+
+        .price-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .price-amount {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .services-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-top: 25px;
+        }
+
+        .services-section h3 {
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .service-item {
+            padding: 20px;
+        }
+
+        .service-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .service-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🧺 Washy Washy - Business Information</h1>
+            <a href="index.html" class="btn btn-back">← Back to Main</a>
+        </div>
+
+        <div class="content">
+            <h2 class="page-title">Business Dashboard</h2>
+
+            <div class="info-grid">
+                
+                <!-- CONTACT INFORMATION CARD -->
+                <div class="info-card">
+                    <h3>📞 Contact Information</h3>
+                    <p>
+                        <strong>📧 Gmail:</strong>
+                        <span class="info-value">washywashy@gmail.com</span>
+                    </p>
+                    <p>
+                        <strong>📱 Phone Number:</strong>
+                        <span class="info-value">+63 912 345 6789</span>
+                    </p>
+                    <p>
+                        <strong>💳 GCash Number:</strong>
+                        <span class="info-value">09123456789</span>
+                    </p>
+                </div>
+
+                <!-- LOCATION CARD -->
+                <div class="info-card">
+                    <h3>📍 Business Location</h3>
+                    <p>
+                        <strong>Address:</strong>
+                        <span class="info-value">Ampayon, Butuan City</span>
+                        <span class="info-value">Agusan del Norte</span>
+                        <span class="info-value">Philippines</span>
+                    </p>
+                    <p style="margin-top: 20px;">
+                        <strong>🕐 Operating Hours:</strong>
+                        <span class="info-value">Monday - Sunday</span>
+                        <span class="info-value">7:00 AM - 8:00 PM</span>
+                    </p>
+                </div>
+
+                <!-- PRICING CARD -->
+                <div class="info-card">
+                    <h3>💰 Service Pricing</h3>
+                    <p>
+                        <strong>Minimum Load: 8 kg</strong>
+                    </p>
+                    
+                    <div class="price-box">
+                        <div style="font-size: 16px;">Single Load</div>
+                        <div class="price-amount">₱185.00</div>
+                    </div>
+                    
+                    <div class="price-box">
+                        <div style="font-size: 16px;">Double Load</div>
+                        <div class="price-amount">₱200.00</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SERVICES SECTION -->
+            <div class="services-section">
+                <h3>✨ Services We Offer</h3>
+                <div class="services-grid">
+                    <div class="service-item">
+                        <div class="service-icon">🧼</div>
+                        <div class="service-name">Wash</div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">💨</div>
+                        <div class="service-name">Dry</div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">👔</div>
+                        <div class="service-name">Fold</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washy Washy - Reports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #4facfe;
+        }
+
+        .btn-primary:hover {
+            background: #36a8d8;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .filter-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-ready {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-otw {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-delivered {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 12px 25px;
+            margin-left: 10px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .report-title {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .print-btn {
+            background: #6c757d;
+        }
+
+        .print-btn:hover {
+            background: #5a6268;
+        }
+
+        .back-btn {
+            background: #dc3545;
+            padding: 10px 20px;
+        }
+
+        .back-btn:hover {
+            background: #c82333;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .btn-group, .filters, .back-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🧺 Washy Washy - Reports</h1>
+            <div class="btn-group">
+                <button class="btn print-btn" onclick="window.print()">🖨️ Print</button>
+                <button class="btn btn-primary" onclick="exportToCSV()">📥 Export CSV</button>
+                <button class="btn back-btn" onclick="window.history.back()">← Back</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Report Type</label>
+                    <select id="reportType" onchange="updateReport()">
+                        <option value="monthly">Monthly Report</option>
+                        <option value="status">Order Status Distribution</option>
+                        <option value="service">Service Type Distribution</option>
+                        <option value="payment">Payment Mode Distribution</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Month</label>
+                    <select id="monthFilter" onchange="updateReport()">
+                        <option value="">All Months</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Year</label>
+                    <select id="yearFilter" onchange="updateReport()">
+                        <option value="">All Years</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="statsContainer" class="stats-grid"></div>
+
+            <div class="report-title" id="reportTitle">Monthly Order Report</div>
+
+            <div class="table-container">
+                <table id="reportTable">
+                    <thead>
+                        <tr id="tableHeader">
+                            <th>Date</th>
+                            <th>Total Orders</th>
+                            <th>Total Revenue (₱)</th>
+                            <th>Avg Order Value (₱)</th>
+                            <th>Processing</th>
+                            <th>Ready</th>
+                            <th>Out for Delivery</th>
+                            <th>Delivered</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportBody">
+                        <tr>
+                            <td colspan="8" class="no-data">Loading data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allOrders = [];
+
+        // Initialize report - Load data from database
+        async function initializeReport() {
+            await loadAllOrders();
+            updateReport();
+        }
+
+        // Load orders from database
+        async function loadAllOrders() {
+            try {
+                const formData = new FormData();
+                formData.append('action', 'getAllOrdersForReports');
+
+                const response = await fetch('api.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.orders && data.orders.length > 0) {
+                    allOrders = data.orders;
+                    console.log('Loaded ' + allOrders.length + ' orders from database');
+                } else {
+                    allOrders = [];
+                    console.log('No orders found in database');
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                allOrders = [];
+            }
+        }
+
+        function getMonthName(month) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+            return months[parseInt(month) - 1] || '';
+        }
+
+        function updateReport() {
+            if (allOrders.length === 0) {
+                showNoData();
+                return;
+            }
+
+            const reportType = document.getElementById('reportType').value;
+            
+            switch(reportType) {
+                case 'monthly':
+                    showMonthlyReport();
+                    break;
+                case 'status':
+                    showStatusDistribution();
+                    break;
+                case 'service':
+                    showServiceDistribution();
+                    break;
+                case 'payment':
+                    showPaymentDistribution();
+                    break;
+            }
+        }
+
+        function showNoData() {
+            document.getElementById('reportTitle').textContent = 'No Data Available';
+            document.getElementById('reportBody').innerHTML = 
+                '<tr><td colspan="8" class="no-data">📭 No orders found. Create orders first to see reports!</td></tr>';
+            document.getElementById('statsContainer').innerHTML = '';
+        }
+
+        function showMonthlyReport() {
+            document.getElementById('reportTitle').textContent = 'Monthly Order Report';
+            document.getElementById('tableHeader').innerHTML = `
+                <th>Date</th>
+                <th>Total Orders</th>
+                <th>Total Revenue (₱)</th>
+                <th>Avg Order Value (₱)</th>
+                <th>Processing</th>
+                <th>Ready</th>
+                <th>Out for Delivery</th>
+                <th>Delivered</th>
+            `;
+
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+
+            const filtered = allOrders.filter(order => {
+                const orderDate = new Date(order.created_at);
+                const orderMonth = String(orderDate.getMonth() + 1).padStart(2, '0');
+                const orderYear = orderDate.getFullYear().toString();
+
+                if (month && orderMonth !== month) return false;
+                if (year && orderYear !== year) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                document.getElementById('reportBody').innerHTML = 
+                    '<tr><td colspan="8" class="no-data">No orders for this period</td></tr>';
+                updateStats(filtered);
+                return;
+            }
+
+            const grouped = {};
+            filtered.forEach(order => {
+                const date = new Date(order.created_at).toLocaleDateString();
+                if (!grouped[date]) {
+                    grouped[date] = [];
+                }
+                grouped[date].push(order);
+            });
+
+            const reportBody = document.getElementById('reportBody');
+            reportBody.innerHTML = '';
+
+            Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
+                const dayOrders = grouped[date];
+                const totalRevenue = dayOrders.reduce((sum, o) => sum + parseFloat(o.amount || 0), 0);
+                const avgValue = (totalRevenue / dayOrders.length).toFixed(2);
+
+                const statusCount = {
+                    'Processing': dayOrders.filter(o => o.status === 'Processing').length,
+                    'Ready': dayOrders.filter(o => o.status === 'Ready for Pickup').length,
+                    'Out for Delivery': dayOrders.filter(o => o.status === 'Out for Delivery').length,
+                    'Delivered': dayOrders.filter(o => o.status === 'Delivered' || o.status === 'Picked Up').length
+                };
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${date}</td>
+                    <td>${dayOrders.length}</td>
+                    <td>₱${totalRevenue.toFixed(2)}</td>
+                    <td>₱${avgValue}</td>
+                    <td><span class="status-badge status-processing">${statusCount['Processing']}</span></td>
+                    <td><span class="status-badge status-ready">${statusCount['Ready']}</span></td>
+                    <td><span class="status-badge status-otw">${statusCount['Out for Delivery']}</span></td>
+                    <td><span class="status-badge status-delivered">${statusCount['Delivered']}</span></td>
+                `;
+                reportBody.appendChild(row);
+            });
+
+            updateStats(filtered);
+        }
+
+        function showStatusDistribution() {
+            document.getElementById('reportTitle').textContent = 'Order Status Distribution';
+            document.getElementById('tableHeader').innerHTML = `
+                <th>Status</th>
+                <th>Order Count</th>
+                <th>Total Revenue (₱)</th>
+                <th colspan="5">Percentage</th>
+            `;
+
+            const statusCount = {};
+            let statusRevenue = {};
+
+            allOrders.forEach(order => {
+                const status = order.status;
+                statusCount[status] = (statusCount[status] || 0) + 1;
+                statusRevenue[status] = (statusRevenue[status] || 0) + parseFloat(order.amount || 0);
+            });
+
+            const reportBody = document.getElementById('reportBody');
+            reportBody.innerHTML = '';
+
+            const statuses = ['Processing', 'Ready for Pickup', 'Out for Delivery', 'Delivered', 'Picked Up'];
+            
+            statuses.forEach(status => {
+                const count = statusCount[status] || 0;
+                if (count === 0) return;
+
+                const percentage = ((count / allOrders.length) * 100).toFixed(1);
+                const revenue = (statusRevenue[status] || 0).toFixed(2);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${status}</strong></td>
+                    <td>${count}</td>
+                    <td>₱${revenue}</td>
+                    <td colspan="5">${percentage}%</td>
+                `;
+                reportBody.appendChild(row);
+            });
+
+            updateStats(allOrders);
+        }
+
+        function showServiceDistribution() {
+            document.getElementById('reportTitle').textContent = 'Service Type Distribution';
+            document.getElementById('tableHeader').innerHTML = `
+                <th>Service Type</th>
+                <th>Order Count</th>
+                <th>Total Revenue (₱)</th>
+                <th colspan="5">Percentage</th>
+            `;
+
+            const serviceCount = {};
+            let serviceRevenue = {};
+
+            allOrders.forEach(order => {
+                const service = order.service_type;
+                serviceCount[service] = (serviceCount[service] || 0) + 1;
+                serviceRevenue[service] = (serviceRevenue[service] || 0) + parseFloat(order.amount || 0);
+            });
+
+            const reportBody = document.getElementById('reportBody');
+            reportBody.innerHTML = '';
+
+            Object.keys(serviceCount).forEach(service => {
+                const count = serviceCount[service];
+                const percentage = ((count / allOrders.length) * 100).toFixed(1);
+                const revenue = (serviceRevenue[service] || 0).toFixed(2);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${service}</strong></td>
+                    <td>${count}</td>
+                    <td>₱${revenue}</td>
+                    <td colspan="5">${percentage}%</td>
+                `;
+                reportBody.appendChild(row);
+            });
+
+            updateStats(allOrders);
+        }
+
+        function showPaymentDistribution() {
+            document.getElementById('reportTitle').textContent = 'Payment Mode Distribution';
+            document.getElementById('tableHeader').innerHTML = `
+                <th>Payment Mode</th>
+                <th>Order Count</th>
+                <th>Total Revenue (₱)</th>
+                <th colspan="5">Percentage</th>
+            `;
+
+            const paymentCount = {};
+            let paymentRevenue = {};
+
+            allOrders.forEach(order => {
+                const payment = order.payment_mode;
+                paymentCount[payment] = (paymentCount[payment] || 0) + 1;
+                paymentRevenue[payment] = (paymentRevenue[payment] || 0) + parseFloat(order.amount || 0);
+            });
+
+            const reportBody = document.getElementById('reportBody');
+            reportBody.innerHTML = '';
+
+            Object.keys(paymentCount).forEach(payment => {
+                const count = paymentCount[payment];
+                const percentage = ((count / allOrders.length) * 100).toFixed(1);
+                const revenue = (paymentRevenue[payment] || 0).toFixed(2);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${payment}</strong></td>
+                    <td>${count}</td>
+                    <td>₱${revenue}</td>
+                    <td colspan="5">${percentage}%</td>
+                `;
+                reportBody.appendChild(row);
+            });
+
+            updateStats(allOrders);
+        }
+
+        function updateStats(filtered) {
+            const totalOrders = filtered.length;
+            const totalRevenue = filtered.reduce((sum, o) => sum + parseFloat(o.amount || 0), 0);
+            const avgOrderValue = totalOrders > 0 ? (totalRevenue / totalOrders).toFixed(2) : 0;
+            const completedOrders = filtered.filter(o => o.status === 'Delivered' || o.status === 'Picked Up').length;
+
+            document.getElementById('statsContainer').innerHTML = `
+                <div class="stat-card">
+                    <h3>Total Orders</h3>
+                    <div class="stat-value">${totalOrders}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <div class="stat-value">₱${totalRevenue.toFixed(2)}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Order Value</h3>
+                    <div class="stat-value">₱${avgOrderValue}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Completed Orders</h3>
+                    <div class="stat-value">${completedOrders}</div>
+                </div>
+            `;
+        }
+
+        function exportToCSV() {
+            const table = document.getElementById('reportTable');
+            let csv = '';
+
+            const headers = Array.from(table.querySelectorAll('th')).map(h => h.textContent);
+            csv += headers.join(',') + '\n';
+
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td')).map(cell => {
+                    let text = cell.textContent.trim();
+                    if (text.includes(',')) {
+                        text = `"${text}"`;
+                    }
+                    return text;
+                });
+                csv += cells.join(',') + '\n';
+            });
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+            element.setAttribute('download', `washy-washy-report-${new Date().toISOString().split('T')[0]}.csv`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        // Load data when page opens
+        window.addEventListener('load', initializeReport);
+    </script>
+
+</body>
+</html>
